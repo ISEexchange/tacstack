@@ -9,6 +9,7 @@ class src::params {
     'lxml',
     'robotframework',
     'supervisor',
+    'python-etcd'
   ]
   
   # These RPMs must be installed before pips.
