@@ -7,13 +7,14 @@ class src::params {
   $pips = [
     'MySQL-python',
     'lxml',
+    'python-etcd',
     'robotframework',
     'supervisor',
-    'python-etcd'
   ]
   
   # These RPMs must be installed before pips.
   $pip_deps = [
+    'libffi-devel',
     'mysql',
     'python-pip',
     'python-setuptools',
@@ -35,6 +36,8 @@ class src::params {
     'httpd',
     'indent',
     'intltool',
+    'libffi',
+    'libffi-devel',
     'libtool',
     'libxml2',
     'libxml2-devel',
