@@ -40,6 +40,7 @@ RUN sed -ri 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config && echo 'root:change
 EXPOSE 22 80 3306 42448
 
 ADD /src/files/phpMyAdmin.conf /etc/httpd/conf.d/
+ADD /src/files/my.cnf /etc/my.cnf
 RUN service mysqld start
 RUN mysql_install_db
 
