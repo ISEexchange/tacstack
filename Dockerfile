@@ -43,11 +43,12 @@ ADD /src/files/phpMyAdmin.conf /etc/httpd/conf.d/
 ADD /src/files/my.cnf /etc/my.cnf
 
 # Start mysql service and create admin user with changeme password
-RUN service mysqld start & \
-    sleep 10s &&\
-    echo "CREATE USER 'admin'@'localhost' IDENTIFIED BY 'changeme'; GRANT ALL PRIVILEGES ON *.* TO admin@'%' WITH GRANT OPTION; FLUSH PRIVILEGES" | mysql
+#RUN service mysqld start & \
+#    sleep 10s &&\
+#    echo "CREATE USER 'admin'@'localhost' IDENTIFIED BY 'changeme'; GRANT ALL PRIVILEGES ON *.* TO admin@'%' WITH GRANT OPTION; FLUSH PRIVILEGES" | mysql
 
-RUN mysql_install_db
+RUN service mysqld start
+#RUN mysql_install_db
 
 RUN /oval/remediate-oscap.sh
 RUN /oval/vulnerability-scan.sh
