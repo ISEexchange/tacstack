@@ -14,6 +14,7 @@ RUN yum -y install \
     httpd vim-enhanced bash-completion unzip \
     mysql mysql-server \
     php php-mysql php-devel php-gd php-pecl-memcache php-pspell php-snmp php-xmlrpc php-xml \
+    phpmyadmin \
     openssh-server openssh-clients passwd \
     python python-pip python-nose python-pep8 \
     gcc \
@@ -42,5 +43,7 @@ RUN sed -ri 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config && echo 'root:change
 EXPOSE 22 80 3306 42448
 
 ADD /src/files/supervisord.conf /etc/
+
+RUN mysql_install_db
 
 CMD ["supervisord", "-n"]
