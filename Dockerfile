@@ -5,8 +5,6 @@ FROM jumanjiman/puppetagent
 # ADD src /tmp/src
 # RUN echo "NETWORKING=yes" > /etc/sysconfig/network
 # RUN puppet apply --modulepath=/tmp /tmp/src/test/init.pp
-# Removing for now until script is added
-# RUN /files/oval-vulnerability-scan.sh
 
 
 # install packages
@@ -44,6 +42,9 @@ EXPOSE 22 80 3306 42448
 ADD /src/files/phpMyAdmin.conf /etc/httpd/conf.d/
 RUN service mysqld start
 RUN mysql_install_db
+
+RUN /oval/remediate-oscap.sh
+RUN /oval/vulnerability-scan.sh
 
 ADD /src/files/supervisord.conf /etc/
 CMD ["supervisord", "-n"]
