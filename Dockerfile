@@ -38,8 +38,8 @@ RUN pip install supervisor MySQL-python robotframework lxml
 RUN ssh-keygen -q -N "" -t dsa -f /etc/ssh/ssh_host_dsa_key && ssh-keygen -q -N "" -t rsa -f /etc/ssh/ssh_host_rsa_key 
 RUN sed -ri 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config && echo 'root:changeme' | chpasswd
 
-# Ports: 22=ssh, 80=http, 3606=mysql, 42448=MAP
-EXPOSE 22 80 3606 42448
+# Ports: 22=ssh, 80=http, 3306=mysql, 42448=MAP
+EXPOSE 22 80 3306 42448
 
 ADD /src/files/supervisord.conf /etc/
 
