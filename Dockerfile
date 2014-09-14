@@ -23,7 +23,6 @@ RUN yum -y install \
     
 RUN yum -y groupinstall 'Development tools'
 RUN echo "NETWORKING=yes" > /etc/sysconfig/network
-RUN service mysqld start
 
 RUN yum -y install \
     libxslt-devel libxslt libxslt-python \
@@ -42,8 +41,9 @@ RUN sed -ri 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config && echo 'root:change
 # Ports: 22=ssh, 80=http, 3306=mysql, 42448=MAP
 EXPOSE 22 80 3306 42448
 
-ADD /src/files/supervisord.conf /etc/
-
+ADD /src/files/phpMyAdmin.conf /etc/httpd/conf.d/
+RUN service mysqld start
 RUN mysql_install_db
 
+ADD /src/files/supervisord.conf /etc/
 CMD ["supervisord", "-n"]
