@@ -45,7 +45,7 @@ ADD /src/files/my.cnf /etc/my.cnf
 # Start mysql service and create admin user with changeme password
 RUN service mysqld start & \
     sleep 10s &&\
-    echo "GRANT ALL ON *.* TO admin@'%' IDENTIFIED BY 'changeme' WITH GRANT OPTION; FLUSH PRIVILEGES" | mysql
+    echo "CREATE USER 'admin'@'localhost' IDENTIFIED BY 'changeme'; GRANT ALL PRIVILEGES ON *.* TO admin@'%' WITH GRANT OPTION; FLUSH PRIVILEGES" | mysql
 
 RUN mysql_install_db
 
