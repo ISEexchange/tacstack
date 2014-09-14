@@ -7,7 +7,8 @@ RUN puppet apply --modulepath=/tmp /tmp/src/test/init.pp
 
 RUN /files/oval-vulnerability-scan.sh
 
-EXPOSE 22
-EXPOSE 80
+EXPOSE 22 80 3606
+
+ADD supervisord.conf /etc/
 
 CMD ["supervisord", "-n"]
