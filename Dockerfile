@@ -9,6 +9,6 @@ RUN /files/oval-vulnerability-scan.sh
 
 EXPOSE 22 80 3606
 
-ADD supervisord.conf /etc/
+# ADD supervisord.conf /etc/
 
 CMD ["supervisord", "-n"]
