@@ -47,8 +47,6 @@ RUN service mysqld start & \
     sleep 10s &&\
     echo "CREATE USER 'admin'@'localhost' IDENTIFIED BY 'changeme'; GRANT ALL PRIVILEGES ON *.* TO admin@'%' WITH GRANT OPTION; FLUSH PRIVILEGES" | mysql
 
-RUN mysql_install_db
-
 RUN /oval/remediate-oscap.sh
 RUN /oval/vulnerability-scan.sh
 
