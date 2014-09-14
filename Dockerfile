@@ -41,7 +41,12 @@ EXPOSE 22 80 3306 42448
 
 ADD /src/files/phpMyAdmin.conf /etc/httpd/conf.d/
 ADD /src/files/my.cnf /etc/my.cnf
-RUN service mysqld start
+
+# Start mysql service and create admin user with changeme password
+RUN service mysqld start & \
+    sleep 10s &&\
+    echo "GRANT ALL ON *.* TO admin@'%' IDENTIFIED BY 'changeme' WITH GRANT OPTION; FLUSH PRIVILEGES" | mysql
+
 RUN mysql_install_db
 
 RUN /oval/remediate-oscap.sh
