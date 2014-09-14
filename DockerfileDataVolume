@@ -1,0 +1,5 @@
+# Centos 6.5
+FROM jumanjiman/puppetagent
+
+VOLUME /var/lib/mysql
+CMD /bin/sh
