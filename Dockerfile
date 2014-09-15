@@ -17,6 +17,7 @@ RUN yum -y install \
     python python-pip python-nose python-pep8 \
     gcc \
     mysql-devel python-devel \
+    subversion \
     ; yum clean all
     
 RUN yum -y groupinstall 'Development tools'
