@@ -40,8 +40,10 @@ RUN sed -ri 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config && echo 'root:change
 # Ports: 22=ssh, 80=http, 3306=mysql, 18900=MAP
 EXPOSE 22 80 3306 18900
 
-ADD /src/files/phpMyAdmin.conf /etc/httpd/conf.d/
+ADD /src/files/phpMyAdmin.conf /etc/httpd/conf.d
 ADD /src/files/my.cnf /etc/my.cnf
+ADD /src/files/bdt_map_setup.sh /home
+ADD /src/files/bashrc /home
 
 # Start mysql service and create admin user with changeme password
 RUN service mysqld start & \
