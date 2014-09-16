@@ -31,7 +31,7 @@ RUN yum -y install \
 
 # install supervisord
 RUN pip install "pip>=1.4,<1.5" --upgrade
-RUN pip install supervisor MySQL-python robotframework lxml
+RUN pip install supervisor MySQL-python robotframework lxml python-etcd
 
 # Configure sshd.
 RUN ssh-keygen -q -N "" -t dsa -f /etc/ssh/ssh_host_dsa_key && ssh-keygen -q -N "" -t rsa -f /etc/ssh/ssh_host_rsa_key 
