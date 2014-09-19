@@ -53,5 +53,7 @@ RUN service mysqld start & \
 RUN /oval/remediate-oscap.sh
 RUN /oval/vulnerability-scan.sh
 
+Run touch /home/testfile.txt
+
 ADD /src/files/supervisord.conf /etc/
 CMD ["supervisord", "-n"]
