@@ -44,6 +44,7 @@ ADD /src/files/phpMyAdmin.conf /etc/httpd/conf.d/
 ADD /src/files/my.cnf /etc/my.cnf
 ADD /src/files/bdt_map_setup.sh /home/
 ADD /src/files/bashrc /home/
+ADD /src/files/.vimrc /home/
 
 RUN chmod 775 /home/bdt_map_setup.sh
 
