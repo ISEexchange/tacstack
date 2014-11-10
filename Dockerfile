@@ -45,6 +45,8 @@ ADD /src/files/my.cnf /etc/my.cnf
 ADD /src/files/bdt_map_setup.sh /home/
 ADD /src/files/bashrc /home/
 
+RUN chmod 775 /home/bdt_map_setup.sh
+
 # Start mysql service and create admin user with changeme password
 RUN service mysqld start & \
     sleep 10s &&\
@@ -53,8 +55,6 @@ RUN service mysqld start & \
 # Commenting out because of '/bin/sh: /oval/remediate-oscap.sh: No such file or directory' issue which @jumanjiman will t/s
 # RUN /oval/remediate-oscap.sh
 # RUN /oval/vulnerability-scan.sh
-
-Run touch /home/testfile.txt
 
 ADD /src/files/supervisord.conf /etc/
 CMD ["supervisord", "-n"]
