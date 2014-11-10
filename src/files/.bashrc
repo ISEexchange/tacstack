@@ -19,6 +19,7 @@ export ALL_PROXY="$proxy_url"
 
 # vi aliases
 alias vbrc='vi ~/.bashrc'
+alias vi='vim'
 
 # svn aliases
 alias svs='svn status'
