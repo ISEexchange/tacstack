@@ -50,8 +50,9 @@ RUN service mysqld start & \
     sleep 10s &&\
     echo "CREATE USER 'admin'@'localhost' IDENTIFIED BY 'changeme'; GRANT ALL PRIVILEGES ON *.* TO admin@'%' WITH GRANT OPTION; FLUSH PRIVILEGES; SET PASSWORD FOR admin@'%'=PASSWORD('changeme');" | mysql
 
-RUN /oval/remediate-oscap.sh
-RUN /oval/vulnerability-scan.sh
+# Commenting out because of '/bin/sh: /oval/remediate-oscap.sh: No such file or directory' issue which @jumanjiman will t/s
+# RUN /oval/remediate-oscap.sh
+# RUN /oval/vulnerability-scan.sh
 
 Run touch /home/testfile.txt
 
