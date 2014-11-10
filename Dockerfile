@@ -43,8 +43,8 @@ EXPOSE 22 80 3306 18900
 ADD /src/files/phpMyAdmin.conf /etc/httpd/conf.d/
 ADD /src/files/my.cnf /etc/my.cnf
 ADD /src/files/bdt_map_setup.sh /home/
-ADD /src/files/bashrc /home/
-ADD /src/files/.vimrc /home/
+ADD /src/files/.bashrc /root/
+ADD /src/files/.vimrc /root/
 
 RUN chmod 775 /home/bdt_map_setup.sh
 
