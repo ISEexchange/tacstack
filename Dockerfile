@@ -55,9 +55,8 @@ RUN service mysqld start & \
     sleep 10s &&\
     echo "CREATE USER 'admin'@'localhost' IDENTIFIED BY 'changeme'; GRANT ALL PRIVILEGES ON *.* TO admin@'%' WITH GRANT OPTION; FLUSH PRIVILEGES; SET PASSWORD FOR admin@'%'=PASSWORD('changeme');" | mysql
 
-# Commenting out because of '/bin/sh: /oval/remediate-oscap.sh: No such file or directory' issue which @jumanjiman will t/s
-# RUN /oval/remediate-oscap.sh
-# RUN /oval/vulnerability-scan.sh
+RUN /oval/remediate-oscap.sh
+RUN /oval/vulnerability-scan.sh
 
 ADD /src/files/supervisord.conf /etc/
 CMD ["supervisord", "-n"]
