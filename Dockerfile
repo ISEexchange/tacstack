@@ -46,9 +46,9 @@ ADD /src/files/bdt_map_setup.sh /home/
 ADD /src/files/.bashrc /root/
 ADD /src/files/.vimrc /root/
 
-source /root/.bashrc
-
-RUN chmod 775 /home/bdt_map_setup.sh
+# Comment out until we understand how to use source and chmod
+# RUN source /root/.bashrc
+# RUN chmod 775 /home/bdt_map_setup.sh
 
 # Start mysql service and create admin user with changeme password
 RUN service mysqld start & \
