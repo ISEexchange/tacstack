@@ -6,7 +6,6 @@ FROM jumanjiman/puppetagent
 # RUN echo "NETWORKING=yes" > /etc/sysconfig/network
 # RUN puppet apply --modulepath=/tmp /tmp/src/test/init.pp
 
-
 # install packages
 RUN yum -y install \
     httpd vim-enhanced bash-completion unzip \
