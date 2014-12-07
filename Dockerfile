@@ -16,7 +16,7 @@ RUN yum -y install \
     python python-pip python-nose python-pep8 \
     gcc libffi libffi-devel \
     mysql-devel python-devel \
-    subversion \
+    subversion ntp \
     ; yum clean all
     
 RUN yum -y groupinstall 'Development tools'
@@ -36,19 +36,23 @@ RUN pip install supervisor MySQL-python robotframework lxml python-etcd
 RUN ssh-keygen -q -N "" -t dsa -f /etc/ssh/ssh_host_dsa_key && ssh-keygen -q -N "" -t rsa -f /etc/ssh/ssh_host_rsa_key 
 RUN sed -ri 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config && echo 'root:changeme' | chpasswd
 
-# Ports: 22=ssh, 80=http, 3306=mysql, 18900=MAP
-EXPOSE 22 80 3306 18900
+# Ports: 22=ssh, 80=http, 3306=mysql, 18900=MAP 18901=RobotTestPort
+EXPOSE 22 80 3306 18900 18901
 
 ADD /src/files/phpMyAdmin.conf  /etc/httpd/conf.d/
 ADD /src/files/my.cnf           /etc/my.cnf
 ADD /src/files/bdt_map_setup.sh /home/
 ADD /src/files/.bashrc          /root/
+ADD /src/files/.bashrc          /root/.bash_profile
 ADD /src/files/.vimrc           /root/
 ADD /src/files/config           /home/
 
-# Comment out until we understand how to use source and chmod
-# RUN source /root/.bashrc
-# RUN chmod 775 /home/bdt_map_setup.sh
+RUN chmod 777 /home/bdt_map_setup.sh
+
+sed -i 's/server 0.centos.pool.ntp.org iburst/server 0.north-america.pool.ntp.org/g' /etc/ntp.conf
+sed -i 's/server 1.centos.pool.ntp.org iburst/server 1.north-america.pool.ntp.org/g' /etc/ntp.conf
+sed -i 's/server 2.centos.pool.ntp.org iburst/server 2.north-america.pool.ntp.org/g' /etc/ntp.conf
+sed -i 's/server 3.centos.pool.ntp.org iburst/server 3.north-america.pool.ntp.org/g' /etc/ntp.conf
 
 # Start mysql service and create admin user with changeme password
 RUN service mysqld start & \
