@@ -17,6 +17,9 @@ export ftp_proxy="$ftp_proxy_url"
 export FTP_PROXY="$ftp_proxy_url"
 export ALL_PROXY="$proxy_url"
 
+# MAP specific environment variables
+export PYTHONPATH='/home/SVN_RobotFramework':${PYTHONPATH}
+
 # vi aliases
 alias vbrc='vi ~/.bashrc'
 alias vi='vim'
