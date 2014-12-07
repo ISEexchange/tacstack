@@ -39,11 +39,12 @@ RUN sed -ri 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config && echo 'root:change
 # Ports: 22=ssh, 80=http, 3306=mysql, 18900=MAP
 EXPOSE 22 80 3306 18900
 
-ADD /src/files/phpMyAdmin.conf /etc/httpd/conf.d/
-ADD /src/files/my.cnf /etc/my.cnf
+ADD /src/files/phpMyAdmin.conf  /etc/httpd/conf.d/
+ADD /src/files/my.cnf           /etc/my.cnf
 ADD /src/files/bdt_map_setup.sh /home/
-ADD /src/files/.bashrc /root/
-ADD /src/files/.vimrc /root/
+ADD /src/files/.bashrc          /root/
+ADD /src/files/.vimrc           /root/
+ADD /src/files/config           /home/
 
 # Comment out until we understand how to use source and chmod
 # RUN source /root/.bashrc
