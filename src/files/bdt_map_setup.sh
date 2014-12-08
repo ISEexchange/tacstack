@@ -8,7 +8,7 @@ svn checkout https://v-db-svn01.office.iseoptions.com/svn/repos/ISE/ASGScripts/T
 
 #Link checkouts with site path
 ln -s /home/SVN_BDT_MAP/trunk/map_frontend_web_gui/* /var/www/html/map*
-ln -s /var/ftp/pub/uploads/* /var/www/html/map/results*
+ln -s /var/ftp/pub/uploads /var/www/html/map/results
 
 # Steps for deployment
 mkdir /home/SVC_UC4
