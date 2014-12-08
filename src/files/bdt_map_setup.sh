@@ -15,3 +15,5 @@ mkdir /home/SVC_UC4
 mkdir /home/SVC_UC4/.ssh
 touch /home/SVC_UC4/.ssh/id_rsa
 touch /home/SVC_UC4/.ssh/id_rsa.pub
+chmod 600 /home/SVC_UC4/.ssh/id_rsa
+chmod 644 /home/SVC_UC4/.ssh/id_rsa.pub
