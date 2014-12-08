@@ -48,6 +48,7 @@ ADD /src/files/.vimrc           /root/
 ADD /src/files/config           /root/.ssh/
 
 RUN chmod 777 /home/bdt_map_setup.sh
+RUN chmod 600 /root/.ssh/config
 
 # Start mysql service and create admin user with changeme password
 RUN service mysqld start & \
