@@ -16,7 +16,7 @@ RUN yum -y install \
     python python-pip python-nose python-pep8 \
     gcc libffi libffi-devel \
     mysql-devel python-devel \
-    subversion ntp \
+    subversion \
     ; yum clean all
     
 RUN yum -y groupinstall 'Development tools'
@@ -45,14 +45,9 @@ ADD /src/files/bdt_map_setup.sh /home/
 ADD /src/files/.bashrc          /root/
 ADD /src/files/.bashrc          /root/.bash_profile
 ADD /src/files/.vimrc           /root/
-ADD /src/files/config           /home/
+ADD /src/files/config           /root/.ssh/
 
 RUN chmod 777 /home/bdt_map_setup.sh
-
-sed -i 's/server 0.centos.pool.ntp.org iburst/server 0.north-america.pool.ntp.org/g' /etc/ntp.conf
-sed -i 's/server 1.centos.pool.ntp.org iburst/server 1.north-america.pool.ntp.org/g' /etc/ntp.conf
-sed -i 's/server 2.centos.pool.ntp.org iburst/server 2.north-america.pool.ntp.org/g' /etc/ntp.conf
-sed -i 's/server 3.centos.pool.ntp.org iburst/server 3.north-america.pool.ntp.org/g' /etc/ntp.conf
 
 # Start mysql service and create admin user with changeme password
 RUN service mysqld start & \

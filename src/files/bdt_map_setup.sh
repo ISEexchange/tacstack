@@ -13,4 +13,5 @@ ln -s /var/ftp/pub/uploads /var/www/html/map/results
 # Steps for deployment
 mkdir /home/SVC_UC4
 mkdir /home/SVC_UC4/.ssh
-mv    /home/config /home/SVC_UC4/.ssh/
+touch /home/SVC_UC4/.ssh/id_rsa
+touch /home/SVC_UC4/.ssh/id_rsa.pub
