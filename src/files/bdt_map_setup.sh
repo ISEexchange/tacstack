@@ -7,7 +7,7 @@ svn checkout https://v-db-svn01.office.iseoptions.com/svn/repos/ISE/ASGScripts/T
 svn checkout https://v-db-svn01.office.iseoptions.com/svn/repos/ISE/ASGScripts/TestAutomation/trunk/RobotFramework /home/SVN_RobotFramework
 
 #Link checkouts with site path
-ln -s /home/SVN_BDT_MAP/map_frontend_web_gui/* /var/www/html/map*
+ln -s /home/SVN_BDT_MAP/trunk/map_frontend_web_gui/* /var/www/html/map*
 ln -s /var/ftp/pub/uploads /var/www/html/map/results
 
 # Steps for deployment
