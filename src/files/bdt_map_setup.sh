@@ -17,3 +17,8 @@ touch /home/SVC_UC4/.ssh/id_rsa
 touch /home/SVC_UC4/.ssh/id_rsa.pub
 chmod 600 /home/SVC_UC4/.ssh/id_rsa
 chmod 644 /home/SVC_UC4/.ssh/id_rsa.pub
+
+# Change the Apache web server's document root for cleaner URL
+sed -i 's,DocumentRoot "/var/www/html",DocumentRoot "/var/www/html/map",g' /etc/httpd/conf/httpd.conf
+sed -i 's,<Directory "/var/www/html",<Directory "/var/www/html/map",g'     /etc/httpd/conf/httpd.conf
+/etc/init.d/httpd restart
