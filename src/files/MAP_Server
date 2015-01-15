@@ -1,0 +1,83 @@
+#!/bin/sh
+# Required-Start:    $local_fs $network $named $time $syslog
+# Required-Stop:     $local_fs $network $named $time $syslog
+### END INIT INFO
+
+SOURCE=/root/.bashrc
+DIR=/home/SVN_BDT_MAP/trunk/map_backend_server
+HOSTNAME=`hostname -i`
+SCRIPT="python MAPServer.py $HOSTNAME $2"
+RUNAS=root
+
+PIDFILE=/var/run/MAP_Server.pid
+LOGFILE=/var/log/MAP_Server.log
+
+start() {
+  if [ -f /var/run/$PIDFILE ] && kill -0 $(cat /var/run/$PIDFILE); then
+    echo 'Service already running' >&2
+    return 1
+  fi
+  echo 'Starting serviceâ€¦' >&2
+  touch $PIDFILE
+  touch $LOGFILE
+  chmod 777 $PIDFILE
+  chmod 777 $LOGFILE
+  source $SOURCE
+  cd $DIR
+  local CMD="$SCRIPT &>> \"$LOGFILE\" & echo \$!"
+  su -c "$CMD" $RUNAS > "$PIDFILE"
+  echo 'Service started' >&2
+}
+
+stop() {
+  if [ ! -f "$PIDFILE" ] || ! kill -0 $(cat "$PIDFILE"); then
+    echo 'Service not running' >&2
+    return 1
+  fi
+  echo 'Stopping serviceâ€¦' >&2
+  kill -9 $(cat "$PIDFILE") && rm -vf "$PIDFILE"
+  echo 'Service stopped' >&2
+}
+
+status() {
+  if [ -f $PIDFILE ] ; then
+    echo 'PID File for serice exists, but that does not mean its actually running. Use ps -ef or netstat to check if its running.' >&2
+    return 1
+  else
+    echo 'PID File for serice DOES NOT exists, but that does not mean its actually running. Use ps -ef or netstat to check if its running.' >&2
+  fi
+}
+
+uninstall() {
+  echo -n "Are you really sure you want to uninstall this service? That cannot be undone. [yes|No] "
+  local SURE
+  read SURE
+  if [ "$SURE" = "yes" ]; then
+    stop
+    rm -f "$PIDFILE"
+    echo "Notice: log file is not be removed: '$LOGFILE'" >&2
+    update-rc.d -f MAP_Server remove
+    rm -fv "$0"
+  fi
+}
+
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  status)
+    status
+    ;;
+  uninstall)
+    uninstall
+    ;;
+  restart)
+    stop
+    start
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|uninstall}"
+esac
