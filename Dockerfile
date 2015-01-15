@@ -46,6 +46,7 @@ ADD /src/files/.bashrc          /root/
 ADD /src/files/.bashrc          /root/.bash_profile
 ADD /src/files/.vimrc           /root/
 ADD /src/files/config           /root/.ssh/
+ADD /src/files/MAP_Server       /etc/init.d/
 
 RUN chmod 777 /home/bdt_map_setup.sh
 RUN chmod 600 /root/.ssh/config
