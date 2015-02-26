@@ -4,7 +4,7 @@
 ### END INIT INFO
 
 SOURCE=/root/.bashrc
-DIR=/home/SVN_BDT_MAP/trunk/map_backend_server
+DIR=/home/bdt/map/src/map_backend_server
 HOSTNAME=`hostname -i`
 SCRIPT="python MAPServer.py $HOSTNAME $2"
 RUNAS=root
