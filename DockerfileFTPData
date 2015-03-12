@@ -1,8 +1,0 @@
-# Centos 6.5
-FROM jumanjiman/puppetagent
-
-RUN /oval/remediate-oscap.sh
-RUN /oval/vulnerability-scan.sh
-
-VOLUME /var/ftp/pub/uploads
-CMD /bin/sh

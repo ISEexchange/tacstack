@@ -10,6 +10,14 @@ with CentOS 6.5 and a LAMP stack of:
 * Python
 
 
+Build locally
+-------------
+
+Clone this git repo, then run:
+
+    script/build
+
+
 Deployment
 ----------
 
@@ -62,21 +70,6 @@ sudo nsenter --target $PID --mount --uts --ipc --net --pid
 # Run various commands, then
 # Press CTRL-D to exit.
 ```
-
-
-OVAL vulnerability scan
------------------------
-
-The docker build runs a vulnerability scan.
-You can also perform the scan inside an existing build via:
-
-    docker run --rm -t quay.io/iseexchange/tacstack /oval/vulnerability-scan.sh
-
-See https://github.com/jumanjihouse/oval for details.
-
-TODO: Implement some sort of CD system to poll the OVAL feed and rebuild
-the image on any update. https://github.com/jumanjiman/docker-gocd may be
-a candidate for the solution.
 
 
 Contributing
