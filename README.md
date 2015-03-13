@@ -2,12 +2,21 @@ Overview
 --------
 
 This repo contains scripts and source to build a docker image
-with CentOS 6.5 and a LAMP stack of:
+with Alpine Linux and a LAMP stack of:
 
 * Apache
 * MySQL
 * PHP
 * Python
+
+Build status on CircleCI (master branch): [![Circle CI](https://circleci.com/gh/ISEexchange/tacstack/tree/master.svg?style=svg&circle-token=373b7a10221a0403c993da96c45ba15ef225e932)](https://circleci.com/gh/ISEexchange/tacstack/tree/master)
+
+
+Build on CircleCI
+-----------------
+
+Open a pull request on Github.
+This triggers a build in CircleCI.
 
 
 Build locally
@@ -74,6 +83,12 @@ sudo nsenter --target $PID --mount --uts --ipc --net --pid
 
 Contributing
 ------------
+
+### Continuous Integration
+
+Each pull request triggers a build on CircleCI.
+PRs cannot be merged if CI fails.
+
 
 ### Diff churn
 
