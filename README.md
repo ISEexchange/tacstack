@@ -33,6 +33,13 @@ selected. To find them, run:
 
 The ports will be listed under the mapapp container.
 
+There are four services in this system that docker-compose will bring up:
+
+    mapapp
+    ftpapp
+    mysqldatavol
+    ftpdatavol
+
 For more information on docker-compose:
 https://docs.docker.com/compose/
 
