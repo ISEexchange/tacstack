@@ -17,7 +17,7 @@ Build and Deploy locally with docker-compose
 
 docker-compose will provide a fully functioning MAP system
 from scratch. It will build all of the required images and start up
-the containers. It will also take care linking the data and app
+the containers. It will also take care of linking the data and app
 containers and will provide ports for you to use. Use this to create
 either a test environment or a production environment. To get started,
 clone this git repo, then run:
@@ -84,18 +84,23 @@ Troubleshooting
 ### Outside a container
 
 ```bash
-# List active containers.
+# Commands for docker-compose:
+# List active and exited containers.
 docker-compose ps
-# or
-docker ps
+# Follow logs from a container.
+docker-compose logs <service-name>
 
+# Commands for docker:
+# List active containers.
+docker ps
 # List all containers.
 docker ps -a
-
 # Follow logs from a container.
 docker logs -f <container-id>
 
-# Get help.
+# docker and docker-compose have similar commands. To view them:
+docker-compose --help
+# Or 
 docker help commands
 ```
 
