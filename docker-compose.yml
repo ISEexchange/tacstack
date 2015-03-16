@@ -1,0 +1,25 @@
+mapapp:
+  build: ./app
+  command: supervisord -n
+  ports:
+    - "22"
+    - "80"
+    - "3306"
+    - "18900"
+    - "18901"
+  volumes_from:
+    - mysqldatavol
+    - ftpdatavol
+
+ftpapp:
+  image: jumanjiman/dropbox
+  ports:
+    - "21:21"
+  volumes_from:
+    - ftpdatavol
+
+mysqldatavol:
+  build: ./appdata
+
+ftpdatavol:
+  build: ./ftpdata
