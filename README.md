@@ -1,8 +1,8 @@
 Overview
 --------
 
-This repo contains scripts and source to build a docker image
-with Alpine Linux and a LAMP stack of:
+This repo contains scripts and source to build multiple docker images
+with Alpine Linux. The main application container has a LAMP stack of:
 
 * Apache
 * MySQL
@@ -12,24 +12,53 @@ with Alpine Linux and a LAMP stack of:
 Build status on CircleCI (master branch): [![Circle CI](https://circleci.com/gh/ISEexchange/tacstack/tree/master.svg?style=svg&circle-token=373b7a10221a0403c993da96c45ba15ef225e932)](https://circleci.com/gh/ISEexchange/tacstack/tree/master)
 
 
+Build and Deploy locally with docker-compose
+-------------
+
+docker-compose will provide a fully functioning MAP system
+from scratch. It will build all of the required images and start up
+the containers. It will also take care linking the data and app
+containers and will provide ports for you to use. Use this to create
+either a test environment or a production environment. To get started,
+clone this git repo, then run:
+
+    docker-compose up -d
+
+The `-d` will start the applications in the background.
+
+The ports for the internal applications will be randomly
+selected. To find them, run:
+
+    docker-compose ps
+
+The ports will be listed under the mapapp container.
+
+For more information on docker-compose:
+https://docs.docker.com/compose/
+
+
 Build on CircleCI
 -----------------
 
 Open a pull request on Github.
 This triggers a build in CircleCI.
+At the moment, this will only build the main docker application.
+docker-compose integration with CircleCI coming soon.
 
 
-Build locally
+Build locally with docker
 -------------
 
-Clone this git repo, then run:
+To build the main application container, clone this git
+repo, then run:
 
     script/build
 
 
-Deployment
+Manual Deployment
 ----------
 
+Follow these instructions if you are not using docker-compose.
 For a live TAC application, run:
 
 ```
@@ -56,6 +85,8 @@ Troubleshooting
 
 ```bash
 # List active containers.
+docker-compose ps
+# or
 docker ps
 
 # List all containers.
