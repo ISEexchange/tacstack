@@ -51,9 +51,6 @@ EXPOSE 22 80 3306 18900 18901
 COPY src /
 
 # Start mysql service and create admin user with changeme password
-#RUN /etc/init.d/mysql setup; \
-#    /etc/init.d/mysql start; \
-#    sleep 10s; \ 
-#    echo "CREATE USER 'admin'@'localhost' IDENTIFIED BY 'changeme'; GRANT ALL PRIVILEGES ON *.* TO admin@'%' WITH GRANT OPTION; FLUSH PRIVILEGES; SET PASSWORD FOR admin@'%'=PASSWORD('changeme');" | mysql
+RUN /root/install_mysql.sh
 
 CMD ["supervisord", "-n"]

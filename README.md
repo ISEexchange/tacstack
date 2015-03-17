@@ -53,6 +53,25 @@ At the moment, this will only build the main docker application.
 docker-compose integration with CircleCI coming soon.
 
 
+Pull an already-built image
+---------------------------
+
+If you want the latest build of master branch:
+
+    docker pull quay.io/iseexchange/tacstack:latest
+
+If you want a specific version:
+
+    # $hash refers to the git commit hash
+    docker pull quay.io/iseexchange/tacstack:${hash:0:7}
+
+If you want the version from your pull request:
+
+    # $handle is your github handle
+    # $number refers to the pull request
+    docker pull quay.io/iseexchange/tacstack:${handle}_pull_${number}
+
+
 Build locally with docker
 -------------
 
