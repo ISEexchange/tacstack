@@ -1,18 +1,9 @@
-# Centos 6.5
-FROM jumanjiman/puppetagent
+FROM gliderlabs/alpine:latest
 
-RUN yum -y install \
-    mysql mysql-server
+RUN apk-install mysql mysql-client
 
-#ADD /src/files/my.cnf /etc/my.cnf
-RUN sed -i -e"s/^\[mysqld\]/\[mysqld\]\nbind-address = 0.0.0.0/" /etc/my.cnf
-
-RUN service mysqld start & \
-    sleep 10s &&\
-    echo "CREATE USER 'admin'@'localhost' IDENTIFIED BY 'changeme'; GRANT ALL PRIVILEGES ON *.* TO admin@'%' WITH GRANT OPTION; FLUSH PRIVILEGES; SET PASSWORD FOR admin@'%'=PASSWORD('changeme');" | mysql
-
-RUN /oval/remediate-oscap.sh
-RUN /oval/vulnerability-scan.sh
+COPY src /
+RUN /root/install_mysql.sh
 
 VOLUME /var/lib/mysql
 CMD /bin/sh
