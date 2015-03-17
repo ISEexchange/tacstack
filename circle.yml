@@ -13,3 +13,22 @@ dependencies:
 test:
   override:
     - script/test
+
+# https://circleci.com/docs/configuration#deployment
+# https://circleci.com/docs/environment-variables
+deployment:
+  master:
+    branch: master
+    owner: ISEexchange
+    commands:
+      - docker login -e . -u $DOCKER_USER -p $DOCKER_PASS quay.io
+      - docker tag tacstack quay.io/iseexchange/tacstack:latest
+      - docker push quay.io/iseexchange/tacstack:latest
+      - docker tag tacstack quay.io/iseexchange/tacstack:${CIRCLE_SHA1:0:7}
+      - docker push quay.io/iseexchange/tacstack:${CIRCLE_SHA1:0:7}
+  pulls:
+    branch: /^(?!master).*$/
+    commands:
+      - docker login -e . -u $DOCKER_USER -p $DOCKER_PASS quay.io
+      - docker tag tacstack quay.io/iseexchange/tacstack:${CIRCLE_USERNAME}_${CIRCLE_BRANCH/\//_}
+      - docker push quay.io/iseexchange/tacstack:${CIRCLE_USERNAME}_${CIRCLE_BRANCH/\//_}
