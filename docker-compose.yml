@@ -19,7 +19,7 @@ ftpapp:
     - ftpdatavol
 
 mysqldatavol:
-  image: "quay.io/iseexchange/tacstack_mysqldata:latest"
+  image: quay.io/iseexchange/tacstack_mysqldata:latest
 
 ftpdatavol:
-  image: "quay.io/iseexchange/tacstack_ftpdata:latest"
+  image: quay.io/iseexchange/tacstack_ftpdata:latest
