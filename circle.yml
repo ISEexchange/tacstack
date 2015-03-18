@@ -21,14 +21,42 @@ deployment:
     branch: master
     owner: ISEexchange
     commands:
+
       - docker login -e . -u $DOCKER_USER -p $DOCKER_PASS quay.io
       - docker tag tacstack quay.io/iseexchange/tacstack:latest
-      - docker push quay.io/iseexchange/tacstack:latest
+      - docker push         quay.io/iseexchange/tacstack:latest
       - docker tag tacstack quay.io/iseexchange/tacstack:${CIRCLE_SHA1:0:7}
-      - docker push quay.io/iseexchange/tacstack:${CIRCLE_SHA1:0:7}
+      - docker push         quay.io/iseexchange/tacstack:${CIRCLE_SHA1:0:7}
+      - docker logout
+
+      - docker login -e . -u $DOCKER_USER -p $MYSQL_PASS quay.io
+      - docker tag mysqldatavol quay.io/iseexchange/tacstack_mysqldata:latest
+      - docker push             quay.io/iseexchange/tacstack_mysqldata:latest
+      - docker tag mysqldatavol quay.io/iseexchange/tacstack_mysqldata:${CIRCLE_SHA1:0:7}
+      - docker push             quay.io/iseexchange/tacstack_mysqldata:${CIRCLE_SHA1:0:7}
+      - docker logout
+
+      - docker login -e . -u $DOCKER_USER -p $FTP_PASS quay.io
+      - docker tag ftpdatavol quay.io/iseexchange/tacstack_ftpdata:latest
+      - docker push           quay.io/iseexchange/tacstack_ftpdata:latest
+      - docker tag ftpdatavol quay.io/iseexchange/tacstack_ftpdata:${CIRCLE_SHA1:0:7}
+      - docker push           quay.io/iseexchange/tacstack_ftpdata:${CIRCLE_SHA1:0:7}
+      - docker logout
+
   pulls:
     branch: /^(?!master).*$/
     commands:
       - docker login -e . -u $DOCKER_USER -p $DOCKER_PASS quay.io
       - docker tag tacstack quay.io/iseexchange/tacstack:${CIRCLE_USERNAME}_${CIRCLE_BRANCH/\//_}
-      - docker push quay.io/iseexchange/tacstack:${CIRCLE_USERNAME}_${CIRCLE_BRANCH/\//_}
+      - docker push         quay.io/iseexchange/tacstack:${CIRCLE_USERNAME}_${CIRCLE_BRANCH/\//_}
+      - docker logout
+
+      - docker login -e . -u $DOCKER_USER -p $MYSQL_PASS quay.io
+      - docker tag mysqldatavol quay.io/iseexchange/tacstack_mysqldata:${CIRCLE_USERNAME}_${CIRCLE_BRANCH/\//_}
+      - docker push             quay.io/iseexchange/tacstack_mysqldata:${CIRCLE_USERNAME}_${CIRCLE_BRANCH/\//_}
+      - docker logout
+
+      - docker login -e . -u $DOCKER_USER -p $FTP_PASS quay.io
+      - docker tag ftpdatavol quay.io/iseexchange/tacstack_ftpdata:${CIRCLE_USERNAME}_${CIRCLE_BRANCH/\//_}
+      - docker push           quay.io/iseexchange/tacstack_ftpdata:${CIRCLE_USERNAME}_${CIRCLE_BRANCH/\//_}
+      - docker logout
