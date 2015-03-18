@@ -1,5 +1,5 @@
 mapapp:
-  build: ./app
+  image: quay.io/iseexchange/tacstack:latest
   command: supervisord -n
   ports:
     - "22"
@@ -19,7 +19,7 @@ ftpapp:
     - ftpdatavol
 
 mysqldatavol:
-  build: ./appdata
+  image: quay.io/iseexchange/tacstack_mysqldata:latest
 
 ftpdatavol:
-  build: ./ftpdata
+  image: quay.io/iseexchange/tacstack_ftpdata:latest
