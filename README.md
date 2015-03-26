@@ -12,33 +12,71 @@ with Alpine Linux. The main application container has a LAMP stack of:
 Build status on CircleCI (master branch): [![Circle CI](https://circleci.com/gh/ISEexchange/tacstack/tree/master.svg?style=svg&circle-token=373b7a10221a0403c993da96c45ba15ef225e932)](https://circleci.com/gh/ISEexchange/tacstack/tree/master)
 
 
-Build and Deploy locally with docker-compose
+How to Launch a Production System
 -------------
 
-docker-compose will provide a fully functioning MAP system
-from scratch. It will build all of the required images and start up
+Download this repo so you can use docker-compose files:
+ 
+    git clone https://github.com/ISEexchange/tacstack.git
+    cd tacstack
+
+You first need to get the container images from quay.io (the 
+repo in the cloud where we store our build images):
+
+    docker-compose -f docker-compose-common.yml pull
+
+Now start up the containers for a production system. This 
+basically means that the ports will be pre-selected:
+
+    docker-compose -f docker-compose-prod.yml up -d
+
+
+How to Launch a Test Environment
+-------------
+
+Pretty much the same as above except the docker-compose 
+up command will be different:
+
+    docker-compose -f docker-compose-testenv.yml -p mytestenv up -d
+
+Output:
+
+    Creating mytestenv_mysqldatavoltestenv_1...
+    Creating mytestenv_ftpdatavoltestenv_1...
+    Creating mytestenv_mapapptestenv_1...
+    Creating mytestenv_ftpapptestenv_1...
+
+The `-p` is what will allow you to have your own set 
+of containers, independent from any other.
+
+
+docker-compose Notes
+-------------
+
+docker-compose will provide a fully functioning system of containers
+from scratch. It will pull all of the required images and start up
 the containers. It will also take care of linking the data and app
-containers and will provide ports for you to use. Use this to create
-either a test environment or a production environment. To get started,
-clone this git repo, then run:
+containers and will provide ports for you to use. Use docker-compose
+to create either a test environment or a production environment.
 
-    docker-compose up -d
+The `-d` in the `docker-compose up` command will start the 
+containers/services in the background.
 
-The `-d` will start the applications in the background.
-
-The ports for the internal applications will be randomly
+The ports for the test environment containers will be randomly
 selected. To find them, run:
 
-    docker-compose ps
+    docker-compose -f docker-compose-testenv.yml ps
 
-The ports will be listed under the mapapp container.
+Or
+
+    docker-compose -f docker-compose-testenv.yml -p mytestenv port mapapptestenv 22
 
 There are four services in this system that docker-compose will bring up:
 
-    mapapp
-    ftpapp
-    mysqldatavol
-    ftpdatavol
+    mapapp[prod|testenv]
+    ftpapp[prod|testenv]
+    mysqldatavol[prod|testenv]
+    ftpdatavol[prod|testenv]
 
 For more information on docker-compose:
 https://docs.docker.com/compose/
@@ -49,11 +87,10 @@ Build on CircleCI
 
 Open a pull request on Github.
 This triggers a build in CircleCI.
-At the moment, this will only build the main docker application.
-docker-compose integration with CircleCI coming soon.
+Dockerfiles will be built and completed docker images will be pushed to quay.io.
 
 
-Pull an already-built image
+Pull an Already-Built Image
 ---------------------------
 
 If you want the latest build of master branch:
@@ -72,7 +109,7 @@ If you want the version from your pull request:
     docker pull quay.io/iseexchange/tacstack:${handle}_pull_${number}
 
 
-Build locally with docker
+Build Locally With Docker
 -------------
 
 To build the main application container, clone this git
@@ -87,21 +124,20 @@ Manual Deployment
 Follow these instructions if you are not using docker-compose.
 For a live TAC application, run:
 
-```
-docker run -d -p 2222:22 -p 80:80 quay.io/iseexchange/tacstack
-```
+    docker run -d quay.io/iseexchange/tacstack_ftpdata:latest --name FTPData
+    docker run -d jumanjiman/dropbox:latest
+    docker run -d quay.io/iseexchange/tacstack_mysqldata:latest --name MySQLData
+    docker run -d -p 18922:22 -p 80:80 -p 18906:3306 -p 18900:18900 -p 18901:18901 --name MAPApp --volumes-from MySQLData --volumes-from FTPData quay.io/iseexchange/tacstack
 
 For an individual test environment, run:
 
-```
-CID=$(docker run -d -P quay.io/iseexchange/tacstack)
+    CID=$(docker run -d -P quay.io/iseexchange/tacstack)
 
-# Find the port on which sshd is running.
-docker port $CID 22
+    # Find the port on which sshd is running.
+    docker port $CID 22
 
-# Find the port on which apache is running.
-docker port $CID 80
-```
+    # Find the port on which apache is running.
+    docker port $CID 80
 
 
 Troubleshooting
@@ -112,8 +148,10 @@ Troubleshooting
 ```bash
 # Commands for docker-compose:
 # List active and exited containers.
+docker-compose -f docker-compose-testenv.yml -p mytestenv ps
 docker-compose ps
 # Follow logs from a container.
+docker-compose -f docker-compose-testenv.yml -p mytestenv logs
 docker-compose logs <service-name>
 
 # Commands for docker:

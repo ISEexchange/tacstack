@@ -1,0 +1,32 @@
+mapapptestenv:
+  extends:
+    file: docker-compose-common.yml
+    service: mapapp
+  ports:
+    - "22"
+    - "80"
+    - "3306"
+    - "18900"
+    - "18901"
+  volumes_from:
+    - mysqldatavoltestenv
+    - ftpdatavoltestenv
+
+ftpapptestenv:
+  extends:
+    file: docker-compose-common.yml
+    service: ftpapp
+  ports:
+    - "21"
+  volumes_from:
+    - ftpdatavoltestenv
+
+mysqldatavoltestenv:
+  extends:
+    file: docker-compose-common.yml
+    service: mysqldatavol
+
+ftpdatavoltestenv:
+  extends:
+    file: docker-compose-common.yml
+    service: ftpdatavol

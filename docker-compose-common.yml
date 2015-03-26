@@ -1,22 +1,9 @@
 mapapp:
   image: quay.io/iseexchange/tacstack:latest
   command: supervisord -n
-  ports:
-    - "18922:22"
-    - "80:80"
-    - "18906:3306"
-    - "18900:18900"
-    - "18901:18901"
-  volumes_from:
-    - mysqldatavol
-    - ftpdatavol
 
 ftpapp:
   image: jumanjiman/dropbox
-  ports:
-    - "21:21"
-  volumes_from:
-    - ftpdatavol
 
 mysqldatavol:
   image: quay.io/iseexchange/tacstack_mysqldata:latest

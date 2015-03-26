@@ -1,0 +1,32 @@
+mapappprod:
+  extends:
+    file: docker-compose-common.yml
+    service: mapapp
+  ports:
+    - "18922:22"
+    - "80:80"
+    - "18906:3306"
+    - "18900:18900"
+    - "18901:18901"
+  volumes_from:
+    - mysqldatavolprod
+    - ftpdatavolprod
+
+ftpappprod:
+  extends:
+    file: docker-compose-common.yml
+    service: ftpapp
+  ports:
+    - "21:21"
+  volumes_from:
+    - ftpdatavolprod
+
+mysqldatavolprod:
+  extends:
+    file: docker-compose-common.yml
+    service: mysqldatavol
+
+ftpdatavolprod:
+  extends:
+    file: docker-compose-common.yml
+    service: ftpdatavol
