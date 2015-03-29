@@ -1,7 +1,6 @@
 # Make directories needed for viewing site
 mkdir /var/www/localhost/htdocs/map
 mkdir /var/www/localhost/htdocs/map/results
-mkdir /var/www/localhost/htdocs/map/reports
 
 # Steps for deployment
 mkdir /home/SVC_UC4
@@ -16,5 +15,6 @@ git clone https://github.com/ISEexchange/bdt.git
 
 ln -s /home/bdt/map/src/map_frontend_web_gui/* /var/www/localhost/htdocs/map*
 ln -s /var/ftp/pub/uploads /var/www/localhost/htdocs/map/results
+ln -s /var/ftp/pub/uploads/reports/ /var/www/localhost/htdocs/map/reports
 
 chmod 644 /etc/phpmyadmin/config.inc.php
