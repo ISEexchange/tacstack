@@ -12,6 +12,8 @@ mapappprod:
   volumes_from:
     - mysqldatavolprod
     - ftpdatavolprod
+  environment:
+    - MAP_PRODUCTION=true
 
 ftpappprod:
   extends:

@@ -1,6 +1,8 @@
 mapapp:
   image: quay.io/iseexchange/tacstack:latest
   command: supervisord -n
+  environment:
+    - MAP_PRODUCTION=false
 
 ftpapp:
   image: jumanjiman/dropbox
