@@ -12,6 +12,7 @@ chmod 644 /home/SVC_UC4/.ssh/id_rsa.pub
 
 cd /home
 git clone https://github.com/ISEexchange/bdt.git
+git clone https://github.com/ISEexchange/robotframework.git
 
 ln -s /home/bdt/map/src/map_frontend_web_gui/* /var/www/localhost/htdocs/map*
 ln -s /var/ftp/pub/uploads /var/www/localhost/htdocs/map/results
