@@ -21,5 +21,5 @@ ln -s /var/ftp/pub/uploads/reports/ /var/www/localhost/htdocs/map/reports
 chmod 644 /etc/phpmyadmin/config.inc.php
 chmod 600 /root/.ssh/config
 
-sed -i 's,DocumentRoot "/var/www/localhost/htdocs",DocumentRoot "/var/www/localhost/htdocs/map",g' /etc/httpd/conf/httpd.conf
-supervisorctl restart hlocalhost/htdocs
+sed -i 's,DocumentRoot "/var/www/localhost/htdocs",DocumentRoot "/var/www/localhost/htdocs/map",g' /etc/apache2/httpd.conf
+supervisorctl restart httpd
