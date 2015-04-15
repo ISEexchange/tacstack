@@ -3,6 +3,7 @@ mapapp:
   command: supervisord -n
   environment:
     - MAP_PRODUCTION=false
+    - PYTHONPATH=/home/robotframework
 
 ftpapp:
   image: jumanjiman/dropbox
