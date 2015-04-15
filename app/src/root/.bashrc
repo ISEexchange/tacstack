@@ -1,25 +1,3 @@
-# http_proxy
-proxy_url="http://proxy.inf.ise.com:3128"
-
-# ftp_proxy (but you should prefer to use hftp:// for ftp-over-http)
-ftp_proxy_url="http://proxy.inf.ise.com:8021"
-
-# Some things should not be proxied.
-#   http://www.w3.org/Daemon/User/Proxies/ProxyClients.html
-# CAUTION: some client don't support no_proxy
-export no_proxy="localhost.localdomain,localhost,127.0.0.1"
-
-export http_proxy="$proxy_url"
-export HTTP_PROXY="$proxy_url"
-export https_proxy="$proxy_url"
-export HTTPS_PROXY="$proxy_url"
-export ftp_proxy="$ftp_proxy_url"
-export FTP_PROXY="$ftp_proxy_url"
-export ALL_PROXY="$proxy_url"
-
-# MAP specific environment variables
-export PYTHONPATH='/home/SVN_RobotFramework':${PYTHONPATH}
-
 # vi aliases
 alias vbrc='vi ~/.bashrc'
 alias vi='vim'
