@@ -63,4 +63,9 @@ keys. Get the keys and update the following two files in your container:
 
 Now MAP can handle deployments too.
 
+If you would like immediately see ETCD contents via the MAP web site, then execute the following in the container:
+
+    cd /home/bdt/map/src/map_backend_server
+    python ETCDHandler.py
+
 The container is now complete. Enjoy!
