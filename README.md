@@ -30,6 +30,7 @@ basically means that the ports will be pre-selected:
 
     docker-compose -f docker-compose-prod.yml up -d
 
+Now follow the steps detailed in [MAP Setup README](MAP_Setup_README.md)
 
 How to Launch a Test Environment
 -------------
