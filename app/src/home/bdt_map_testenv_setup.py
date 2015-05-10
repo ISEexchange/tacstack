@@ -78,8 +78,7 @@ def clone_repo(name):
 
 
 def import_map_db():
-    # db_file = '/home/bdt/map/map_db_ref_data.sql'
-    db_file = '/home/m.sql'
+    db_file = '/home/bdt/map/map_db_ref_data.sql'
     print '\nImporting map_db database from %s' % db_file
     conn = MySQLdb.connect(host='127.0.0.1', port=3306, user='root', passwd='')
     cursor = conn.cursor()
