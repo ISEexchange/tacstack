@@ -1,6 +1,6 @@
 import os
 import sys
-import git # pip install gitpython
+import git
 import errno
 import MySQLdb
 import fileinput
@@ -13,12 +13,33 @@ ISE_REPOS = {
 }
 
 
+def ask_for_key_import():
+    print 'Would you like to import your SSH keys for Github communication? y|n'
+    line = sys.stdin.readline()
+    if line.rstrip('\n') == 'y':
+        return True
+    else:
+        return False
+
+
 def make_sure_path_exists(path):
     try:
         os.makedirs(path)
     except OSError as exception:
         if exception.errno != errno.EEXIST:
             raise
+
+
+def set_file_perms(f_name, perm):
+    cfg_file = '/root/.ssh/config'
+    perm = 0600
+    try:
+        os.chmod(cfg_file, perm)
+    except Exception, e:
+        print 'Failed to chmod %s to %s' % (cfg_file, perm)
+        print 'Exception: %s' % e
+        return False
+    print '\nChanged permissions for %s to %s' % (cfg_file, perm)
 
 
 def get_multiline_input(breaker):
@@ -41,36 +62,47 @@ def get_keys():
     print '\nEnter matching public key'
     public_key = sys.stdin.readline()
     print 'Successfully captured public key'
-    return {'pri':private_key, 'pub':public_key}
+    return {'pri': private_key, 'pub': public_key}
 
 
 def store_keys(keys):
     pri_file = '/root/.ssh/id_rsa'
     print '\nWriting private key to %s' % pri_file
-    f = open(pri_file, 'w')
-    f.write(keys['pri'])
-    f.close()
-    os.chmod(pri_file, 0600)
+    try:
+        f = open(pri_file, 'w')
+        f.write(keys['pri'])
+        f.close()
+    except Exception, e:
+        print 'Failed to open and/or write to %s' % pri_file
+        print 'Exception: %s' % e
+        return False
+    set_file_perms(pri_file, 0600)
     print 'Saved private key into %s. Set permission to %s' % (pri_file, '0600')
 
     pub_file = '/root/.ssh/id_rsa.pub'
     print '\nWriting public key to %s' % pub_file
-    f = open(pub_file, 'w')
-    f.write(keys['pub'])
-    f.close()
-    os.chmod(pub_file, 0644)
+    try:
+        f = open(pub_file, 'w')
+        f.write(keys['pub'])
+        f.close()
+    except Exception, e:
+        print 'Failed to open and/or write to %s' % pub_file
+        print 'Exception: %s' % e
+        return False
+    set_file_perms(pub_file, 0644)
     print 'Saved public key into %s. Set permission to %s' % (pub_file, '0644')
 
 
-def set_config_perms():
-    cfg_file = '/root/.ssh/config'
-    os.chmod(cfg_file, 0600)
-    print '\nChanged permissions for %s to %s' % (cfg_file, '0600')
-
-def clone_repo(name):
-    print "\nWhats the SSH clone URL for your forked %s repo?" % name
+def clone_repo(name, conn_type):
+    print "\nWhats the %s clone URL for your forked %s repo?" % (
+        conn_type, name)
     user_repo = sys.stdin.readline().rstrip('\n')
-    repo = git.Repo.clone_from(user_repo, name)
+    try:
+        repo = git.Repo.clone_from(user_repo, name)
+    except Exception, e:
+        print "Failed to clone repo: '%s'" % user_repo
+        print 'Exception: %s' % e
+        return False
     dest_dir = os.path.join(os.getcwd(), name)
     print 'Successfully cloned %s into %s' % (user_repo, dest_dir)
     repo.create_remote('upstream', ISE_REPOS[name])
@@ -78,11 +110,17 @@ def clone_repo(name):
 
 
 def import_map_db():
-    db_file = '/home/bdt/map/map_db_ref_data.sql'
+    # db_file = '/home/bdt/map/src/map_database/map_db_ref_data.sql'
+    db_file = '/home/m.sql'
     print '\nImporting map_db database from %s' % db_file
     conn = MySQLdb.connect(host='127.0.0.1', port=3306, user='root', passwd='')
     cursor = conn.cursor()
-    cursor.execute('\n'.join(open(db_file).readlines()))
+    try:
+        cursor.execute('\n'.join(open(db_file).readlines()))
+    except Exception, e:
+        print 'Failed to import map_db from %s' % db_file
+        print 'Exception: %s' % e
+        return False
 
 
 def create_symlinks():
@@ -95,50 +133,95 @@ def create_symlinks():
             dst_path = os.path.join(dest_dir, dir_name.split(root_dir)[1])
             make_sure_path_exists(dst_path)
             full_dst_path = os.path.join(dst_path, f_name)
-            os.symlink(src_path, full_dst_path)
+            try:
+                os.symlink(src_path, full_dst_path)
+            except Exception, e:
+                print 'Failed to create symlink',
+                print "'%s' -> '%s'" % (full_dst_path, src_path)
+                print 'Exception: %s' % e
+                return False
 
     root_dir = '/var/ftp/pub/uploads'
     dest_dir = '/var/www/localhost/htdocs/map/results'
     print 'Creating symlinks for %s -> %s' % (dest_dir, root_dir)
-    os.symlink(root_dir, dest_dir)
+    try:
+        os.symlink(root_dir, dest_dir)
+    except Exception, e:
+        print 'Failed to create symlink',
+        print "'%s' -> '%s'" % (full_dst_path, src_path)
+        print 'Exception: %s' % e
+        return False
     print 'Successfully created symlinks'
 
     root_dir = '/var/ftp/pub/uploads/reports/'
     dest_dir = '/var/www/localhost/htdocs/map/reports'
     print 'Creating symlinks for %s -> %s' % (dest_dir, root_dir)
-    os.symlink(root_dir,dest_dir)
+    try:
+        os.symlink(root_dir, dest_dir)
+    except Exception, e:
+        print 'Failed to create symlink',
+        print "'%s' -> '%s'" % (full_dst_path, src_path)
+        print 'Exception: %s' % e
+        return False
     print 'Successfully created symlinks'
 
 
 def update_httpd_settings():
     print '\nSetting httpd DocumentRoot to /var/www/localhost/htdocs/map'
-    os.chmod('/etc/phpmyadmin/config.inc.php', 0644)
+    set_file_perms('/etc/phpmyadmin/config.inc.php', 0644)
     for line in fileinput.input('/etc/apache2/httpd.conf', inplace=True):
         print line.replace(
             'DocumentRoot "/var/www/localhost/htdocs"',
             'DocumentRoot "/var/www/localhost/htdocs/map"'),
 
+
 def process_control():
-    server = xmlrpclib.Server('http://localhost:9001/RPC2')
+    server_url = 'http://localhost:9001/RPC2'
+    try:
+        server = xmlrpclib.Server(server_url)
+    except Exception, e:
+        print 'Failed to connect to %s' % server_url
+        print 'Exception: %s' % e
+        return False
     print '\nRestarting httpd with supervisor'
-    server.supervisor.stopProcess('httpd')
-    server.supervisor.startProcess('httpd')
+    try:
+        server.supervisor.stopProcess('httpd')
+    except Exception, e:
+        print 'Failed to stop httpd'
+        print 'Exception: %s' % e
+        return False
+    try:
+        server.supervisor.startProcess('httpd')
+    except Exception, e:
+        print 'Failed to start httpd'
+        print 'Exception: %s' % e
+        return False
     print 'Starting map with supervisor'
-    server.supervisor.startProcess('map')
+    try:
+        server.supervisor.startProcess('map')
+    except Exception, e:
+        print 'Failed to start map'
+        print 'Exception: %s' % e
+        return False
 
 
 if __name__ == "__main__":
 
-    # 1. Get and save keys
-    store_keys(get_keys())
+    conn_type = 'HTTPS'
+    # 0. Ask if they want to provide keys
+    import_keys = ask_for_key_import()
 
-    # 2. Set correct permissions for config file
-    set_config_perms()
+    # 1. Get and save keys
+    if import_keys:
+        conn_type = 'SSH'
+        store_keys(get_keys())
+        # 2. Set correct permissions for config file
+        set_file_perms('/root/.ssh/config', 0600)
 
     # 3. Download the repos
     os.chdir('/home')
-    clone_repo('bdt')
-    clone_repo('robotframework')
+    clone_repo('bdt', conn_type)
+    clone_repo('robotframework', conn_type)
 
     # 4. Import map_db
     import_map_db()
