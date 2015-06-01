@@ -5,6 +5,7 @@ import errno
 import MySQLdb
 import fileinput
 import xmlrpclib
+import subprocess
 
 
 def make_sure_path_exists(path):
@@ -133,12 +134,17 @@ def process_control():
 
 if __name__ == "__main__":
 
+    user   = sys.argv[1]
+    token  = sys.argv[2]
+    org    = sys.argv[3]
+    branch = sys.argv[4]
+
     # Download the repos
     os.chdir('/home')
-    repo = 'https://' + sys.argv[1] + ':' + sys.argv[2] + '@github.com/ISEexchange/bdt.git'
-    clone_repo(repo, 'bdt')
-    repo = 'https://' + sys.argv[1] + ':' + sys.argv[2] + '@github.com/ISEexchange/robotframework.git'
+    repo = 'https://' + user + ':' + token + '@github.com/ISEexchange/robotframework.git'
     clone_repo(repo, 'robotframework')
+
+    subprocess.Popen('git clone -b %s https://%s:%s@github.com/%s/bdt.git' % (branch, user, token, org), shell=True, stdout=subprocess.PIPE).communicate()
 
     # Import map_db
     import_map_db()
