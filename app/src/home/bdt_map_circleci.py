@@ -27,14 +27,6 @@ def set_file_perms(f_name, perm):
 
 
 def clone_repo(repo_url, name):
-    try:
-        repo = git.Repo.clone_from(repo_url, name)
-    except Exception, e:
-        print "Failed to clone repo: '%s'" % name
-        print 'Exception: %s' % e
-        return False
-    dest_dir = os.path.join(os.getcwd(), name)
-    print 'Successfully cloned %s' % name
 
 
 def import_map_db():
@@ -136,18 +128,19 @@ if __name__ == "__main__":
 
     user   = sys.argv[1]
     token  = sys.argv[2]
-    org    = sys.argv[3]
     branch = sys.argv[4]
 
     # Download the repos
     os.chdir('/home')
-    repo = 'https://' + user + ':' + token + '@github.com/ISEexchange/robotframework.git'
-    clone_repo(repo, 'robotframework')
+    repo = 'https://%s:%s@github.com/ISEexchange/robotframework.git' % (user, token)
+    subprocess.Popen('git clone %s' % repo, shell=True, stdout=subprocess.PIPE).communicate()
 
-    subprocess.Popen('git clone https://%s:%s@github.com/ISEexchange/bdt.git' % (user, token), shell=True, stdout=subprocess.PIPE).communicate()
+    repo = "https://%s:%s@github.com/ISEexchange/bdt.git" % (user, token)
+    subprocess.Popen('git clone %s' % repo, shell=True, stdout=subprocess.PIPE).communicate()
+
+    # Check out the branch this pull request is for
     os.chdir('/home/bdt')
     subprocess.Popen('git fetch origin %s/head:test_branch ' % (branch), shell=True, stdout=subprocess.PIPE).communicate()
-
     subprocess.Popen('git checkout test_branch', shell=True, stdout=subprocess.PIPE).communicate()
 
     os.chdir('/home')
