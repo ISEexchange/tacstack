@@ -1,5 +1,5 @@
 mapapp:
-  image: quay.io/iseexchange/tacstack:cbautista1002_circleci_test
+  image: quay.io/iseexchange/tacstack:latest
   command: supervisord -n
   environment:
     - MAP_PRODUCTION=false
