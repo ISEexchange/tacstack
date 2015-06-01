@@ -144,7 +144,13 @@ if __name__ == "__main__":
     repo = 'https://' + user + ':' + token + '@github.com/ISEexchange/robotframework.git'
     clone_repo(repo, 'robotframework')
 
-    subprocess.Popen('git clone -b %s https://%s:%s@github.com/%s/bdt.git' % (branch, user, token, org), shell=True, stdout=subprocess.PIPE).communicate()
+    subprocess.Popen('git clone https://%s:%s@github.com/ISEexchange/bdt.git' % (user, token), shell=True, stdout=subprocess.PIPE).communicate()
+    os.chdir('/home/bdt')
+    subprocess.Popen('git fetch origin %s/head:test_branch ' % (branch), shell=True, stdout=subprocess.PIPE).communicate()
+
+    subprocess.Popen('git checkout test_branch', shell=True, stdout=subprocess.PIPE).communicate()
+
+    os.chdir('/home')
 
     # Import map_db
     import_map_db()

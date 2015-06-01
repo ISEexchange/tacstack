@@ -9,6 +9,8 @@ mapapptestenv:
     - "18900"
     - "18901"
     - "9001"
+  volumes:
+    - /home/ubuntu/MAP_Regression_Results:/home/MAP_Regression_Results
   volumes_from:
     - mysqldatavoltestenv
     - ftpdatavoltestenv
