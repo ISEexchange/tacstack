@@ -125,7 +125,7 @@ if __name__ == "__main__":
 
     user   = sys.argv[1]
     token  = sys.argv[2]
-    branch = sys.argv[4]
+    branch = sys.argv[3]
 
     # Download the repos
     os.chdir('/home')
