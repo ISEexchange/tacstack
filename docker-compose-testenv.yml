@@ -11,6 +11,7 @@ mapapptestenv:
     - "9001"
   volumes:
     - /home/ubuntu/MAP_Regression_Results:/home/MAP_Regression_Results
+    - /home/ubuntu/server_logs:/var/log
   volumes_from:
     - mysqldatavoltestenv
     - ftpdatavoltestenv
