@@ -26,9 +26,6 @@ def set_file_perms(f_name, perm):
     print '\nChanged permissions for %s to %s' % (f_name, str(perm))
 
 
-def clone_repo(repo_url, name):
-
-
 def import_map_db():
     db_file = '/home/bdt/map/src/map_database/map_db_ref_data.sql'
     print '\nImporting map_db database from %s' % db_file
