@@ -7,7 +7,9 @@ dependencies:
   override:
     - docker info
     - docker images
-    - script/build
+    - docker build -t tacstack     app/
+    - docker build -t mysqldatavol appdata/
+    - docker build -t ftpdatavol   ftpdata/
     - docker images
 
 test:

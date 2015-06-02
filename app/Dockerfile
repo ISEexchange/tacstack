@@ -1,4 +1,4 @@
-FROM gliderlabs/alpine:latest
+FROM gliderlabs/alpine:3.1
 
 # Please list packages, one per line, in alpha order.
 RUN apk-install \
@@ -39,7 +39,7 @@ RUN apk-install \
     ;
 
 RUN pip install "pip>=1.4,<1.5" --upgrade
-RUN pip install MySQL-python robotframework lxml python-etcd gitpython
+RUN pip install MySQL-python robotframework lxml python-etcd gitpython pylint
 
 # Configure sshd.
 RUN ssh-keygen -q -N "" -t dsa -f /etc/ssh/ssh_host_dsa_key && ssh-keygen -q -N "" -t rsa -f /etc/ssh/ssh_host_rsa_key 
