@@ -1,4 +1,4 @@
-FROM gliderlabs/alpine:latest
+FROM gliderlabs/alpine:3.1
 
 # Please list packages, one per line, in alpha order.
 RUN apk-install \
