@@ -8,11 +8,11 @@ Import FTP Data
 
 If there is an existing FTP data volume export its contents using the command below. Change the `--volumes-from` argument and the name of the resulting tar file:
 
-    docker run --rm --volumes-from ftpdatavolprod_old -v $(pwd):/backup gliderlabs/alpine:latest tar cvf /backup/ftpdata_2015_03_29.tar /var/ftp/pub/uploads/
+    docker run --rm --volumes-from ftpdatavolprod_old -v $(pwd):/backup alpine:latest tar cvf /backup/ftpdata_2015_03_29.tar /var/ftp/pub/uploads/
 
 Now import the tar ball into your just-created container using the command below. Change the `--volumes-from` argument and the name of the tar file:
 
-    docker run --rm -it --volumes-from ftpdatavolprod_new -v $(pwd):/backup gliderlabs/alpine:latest tar xvf /backup/ftpdata_2015_03_29.tar
+    docker run --rm -it --volumes-from ftpdatavolprod_new -v $(pwd):/backup alpine:latest tar xvf /backup/ftpdata_2015_03_29.tar
 
 Import MySQL Data
 -------------

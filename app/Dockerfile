@@ -1,7 +1,7 @@
-FROM gliderlabs/alpine:3.1
+FROM alpine:3.2
 
 # Please list packages, one per line, in alpha order.
-RUN apk-install \
+RUN apk add --update \
     alpine-sdk \
     apache2 \
     bash \
@@ -12,9 +12,7 @@ RUN apk-install \
     libxml2-dev \
     libxslt \
     libxslt-dev \
-    mysql \
-    mysql-client \
-    mysql-dev \
+    mariadb-dev \
     openssh \
     openssh-client \
     php \
@@ -36,7 +34,7 @@ RUN apk-install \
     subversion \
     supervisor \
     vim \
-    ;
+    && rm -f /var/cache/apk/*
 
 RUN pip install "pip>=1.4,<1.5" --upgrade
 RUN pip install MySQL-python robotframework lxml python-etcd gitpython pylint
