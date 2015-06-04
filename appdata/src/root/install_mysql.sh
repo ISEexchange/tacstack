@@ -5,7 +5,7 @@ set -e
 
 # The setup step requires /run/openrc/softlevel,
 # which we copy in via the Dockerfile.
-/etc/init.d/mysql setup
+/etc/init.d/mariadb setup
 
 sock_path="/var/lib/mysql/mysql.sock"
 
