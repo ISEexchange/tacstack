@@ -8,6 +8,7 @@ mapapptestenv:
     - "3306"
     - "18900"
     - "18901"
+    - "18930"
     - "9001"
   volumes:
     - ~/MAP_Regression_Results:/home/MAP_Regression_Results

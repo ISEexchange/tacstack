@@ -8,6 +8,7 @@ mapappprod:
     - "18906:3306"
     - "18900:18900"
     - "18901:18901"
+    - "18930:18930"
     - "9001:9001"
   volumes_from:
     - mysqldatavolprod
