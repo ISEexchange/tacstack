@@ -23,3 +23,6 @@ chmod 600 /root/.ssh/config
 
 sed -i 's,DocumentRoot "/var/www/localhost/htdocs",DocumentRoot "/var/www/localhost/htdocs/map",g' /etc/apache2/httpd.conf
 supervisorctl restart httpd
+
+cd /home/bdt/map/src/map_nodejs_server
+npm install
