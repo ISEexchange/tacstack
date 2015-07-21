@@ -5,6 +5,7 @@ import errno
 import MySQLdb
 import fileinput
 import xmlrpclib
+import subprocess
 
 
 ISE_REPOS = {
@@ -31,15 +32,13 @@ def make_sure_path_exists(path):
 
 
 def set_file_perms(f_name, perm):
-    cfg_file = '/root/.ssh/config'
-    perm = 0600
     try:
-        os.chmod(cfg_file, perm)
+        os.chmod(f_name, perm)
     except Exception, e:
-        print 'Failed to chmod %s to %s' % (cfg_file, perm)
+        print 'Failed to chmod %s to %s' % (f_name, oct(perm))
         print 'Exception: %s' % e
         return False
-    print '\nChanged permissions for %s to %s' % (cfg_file, perm)
+    print '\nChanged permissions for %s to %s' % (f_name, oct( perm))
 
 
 def get_multiline_input(breaker):
@@ -220,6 +219,31 @@ if __name__ == "__main__":
     # 3. Download the repos
     os.chdir('/home')
     clone_repo('bdt', conn_type)
+
+    # 3a. Pull and go into develop branch
+
+    print 'Would you like to checkout upstream\'s develop branch? y|n'
+    line = sys.stdin.readline()
+    if line.rstrip('\n') == 'y':
+
+        print 'What email address should we use for your git config?'
+        cfg_email = sys.stdin.readline().rstrip('\n')
+        subprocess.Popen(['git config --global user.email "%s"' % cfg_email], shell=True,
+            stdout=subprocess.PIPE).communicate()
+
+        print 'What full name should we use for your git config?'
+        cfg_name = sys.stdin.readline().rstrip('\n')
+        subprocess.Popen(['git config --global user.name "%s"' % cfg_name], shell=True,
+            stdout=subprocess.PIPE).communicate()
+
+        subprocess.Popen(['cd /home/bdt && git checkout -b develop'], shell=True,
+            stdout=subprocess.PIPE).communicate()
+        subprocess.Popen(['cd /home/bdt && git fetch --prune upstream'], shell=True,
+            stdout=subprocess.PIPE).communicate()
+        subprocess.Popen(['cd /home/bdt && git rebase upstream/develop'], shell=True,
+            stdout=subprocess.PIPE).communicate()
+
+    os.chdir('/home')
     clone_repo('robotframework', conn_type)
 
     # 4. Import map_db
