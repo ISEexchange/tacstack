@@ -222,7 +222,7 @@ if __name__ == "__main__":
 
     # 3a. Pull and go into develop branch
 
-    print 'Would you like to checkout upstream\'s develop branch? y|n'
+    print '\nWould you like to checkout upstream\'s develop branch? y|n'
     line = sys.stdin.readline()
     if line.rstrip('\n') == 'y':
 
@@ -245,6 +245,14 @@ if __name__ == "__main__":
 
     os.chdir('/home')
     clone_repo('robotframework', conn_type)
+
+    os.chdir('/home')
+    print '\nCloning glowing-configurator repo...'
+    subprocess.Popen(['git clone git@github.com:cbautista1002/glowing-configurator.git'], shell=True,
+            stdout=subprocess.PIPE).communicate()
+    subprocess.Popen(['echo "source /home/glowing-configurator/.bashrc" >> ~/.bashrc'], shell=True,
+            stdout=subprocess.PIPE).communicate()
+    print "\nRun 'source  ~/.bashrc' to load new aliases from glowing-configurator"
 
     # 4. Import map_db
     import_map_db()
