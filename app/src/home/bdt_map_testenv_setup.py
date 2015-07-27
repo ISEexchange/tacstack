@@ -181,6 +181,7 @@ def process_control():
         print 'Failed to connect to %s' % server_url
         print 'Exception: %s' % e
         return False
+
     print '\nRestarting httpd with supervisor'
     try:
         server.supervisor.stopProcess('httpd')
@@ -194,6 +195,7 @@ def process_control():
         print 'Failed to start httpd'
         print 'Exception: %s' % e
         return False
+
     print 'Starting map with supervisor'
     try:
         server.supervisor.startProcess('map')
@@ -201,6 +203,15 @@ def process_control():
         print 'Failed to start map'
         print 'Exception: %s' % e
         return False
+
+    print 'Starting nodejs with supervisor'
+    try:
+        server.supervisor.startProcess('nodejs')
+    except Exception, e:
+        print 'Failed to start nodejs'
+        print 'Exception: %s' % e
+        return False
+
 
 
 if __name__ == "__main__":
@@ -216,32 +227,43 @@ if __name__ == "__main__":
         # 2. Set correct permissions for config file
         set_file_perms('/root/.ssh/config', 0600)
 
+    # 2. Get git config info
+    print '\nWhat email address should we use for your git config?'
+    cfg_email = sys.stdin.readline().rstrip('\n')
+    subprocess.Popen(['git config --global user.email "%s"' % cfg_email], shell=True,
+        stdout=subprocess.PIPE).communicate()
+    print '\nWhat full name should we use for your git config?'
+    cfg_name = sys.stdin.readline().rstrip('\n')
+    subprocess.Popen(['git config --global user.name "%s"' % cfg_name], shell=True,
+        stdout=subprocess.PIPE).communicate()
+
     # 3. Download the repos
     os.chdir('/home')
     clone_repo('bdt', conn_type)
 
     # 3a. Pull and go into develop branch
-
-    print '\nWould you like to checkout upstream\'s develop branch? y|n'
+    print '\nWould you like to git pull upstream\'s develop branch? y|n'
     line = sys.stdin.readline()
     if line.rstrip('\n') == 'y':
+        os.chdir('/home/bdt')
+        r = subprocess.Popen(['git checkout -b develop'], shell=True,
+            stdout=subprocess.PIPE).communicate()
+        print r[0]
+        print r[1]
+        r = subprocess.Popen(['git pull --commit --no-edit upstream develop'], shell=True,
+            stdout=subprocess.PIPE).communicate()
+        print r[0]
+        print r[1]
 
-        print 'What email address should we use for your git config?'
-        cfg_email = sys.stdin.readline().rstrip('\n')
-        subprocess.Popen(['git config --global user.email "%s"' % cfg_email], shell=True,
+    # 3b. Install npm packages
+    print '\nWould you like to install NodeJS\' npm packages? y|n'
+    line = sys.stdin.readline()
+    if line.rstrip('\n') == 'y':
+        os.chdir('/home/bdt/map/src/map_nodejs_server')
+        r = subprocess.Popen(['npm install'], shell=True,
             stdout=subprocess.PIPE).communicate()
-
-        print 'What full name should we use for your git config?'
-        cfg_name = sys.stdin.readline().rstrip('\n')
-        subprocess.Popen(['git config --global user.name "%s"' % cfg_name], shell=True,
-            stdout=subprocess.PIPE).communicate()
-
-        subprocess.Popen(['cd /home/bdt && git checkout -b develop'], shell=True,
-            stdout=subprocess.PIPE).communicate()
-        subprocess.Popen(['cd /home/bdt && git fetch --prune upstream'], shell=True,
-            stdout=subprocess.PIPE).communicate()
-        subprocess.Popen(['cd /home/bdt && git rebase upstream/develop'], shell=True,
-            stdout=subprocess.PIPE).communicate()
+        print r[0]
+        print r[1]
 
     os.chdir('/home')
     clone_repo('robotframework', conn_type)
