@@ -173,7 +173,7 @@ def update_httpd_settings():
             'DocumentRoot "/var/www/localhost/htdocs/map"'),
 
 
-def process_control():
+def process_control(add_nodejs):
     server_url = 'http://localhost:9001/RPC2'
     try:
         server = xmlrpclib.Server(server_url)
@@ -204,13 +204,14 @@ def process_control():
         print 'Exception: %s' % e
         return False
 
-    print 'Starting nodejs with supervisor'
-    try:
-        server.supervisor.startProcess('nodejs')
-    except Exception, e:
-        print 'Failed to start nodejs'
-        print 'Exception: %s' % e
-        return False
+    if add_nodejs == 'y':
+        print 'Starting nodejs with supervisor'
+        try:
+            server.supervisor.startProcess('nodejs')
+        except Exception, e:
+            print 'Failed to start nodejs'
+            print 'Exception: %s' % e
+            return False
 
 
 
@@ -258,7 +259,8 @@ if __name__ == "__main__":
     # 3b. Install npm packages
     print '\nWould you like to install NodeJS\' npm packages? y|n'
     line = sys.stdin.readline()
-    if line.rstrip('\n') == 'y':
+    add_nodejs = line.rstrip('\n')
+    if add_nodejs == 'y':
         os.chdir('/home/bdt/map/src/map_nodejs_server')
         r = subprocess.Popen(['npm install'], shell=True,
             stdout=subprocess.PIPE).communicate()
@@ -286,7 +288,7 @@ if __name__ == "__main__":
     update_httpd_settings()
 
     # 7. Restart/start supervisor processes
-    process_control()
+    process_control(add_nodejs)
 
     print "\nYou're all set!\n"
 
