@@ -5,6 +5,7 @@ import errno
 import MySQLdb
 import fileinput
 import xmlrpclib
+import subprocess
 
 
 ISE_REPOS = {
@@ -31,15 +32,13 @@ def make_sure_path_exists(path):
 
 
 def set_file_perms(f_name, perm):
-    cfg_file = '/root/.ssh/config'
-    perm = 0600
     try:
-        os.chmod(cfg_file, perm)
+        os.chmod(f_name, perm)
     except Exception, e:
-        print 'Failed to chmod %s to %s' % (cfg_file, perm)
+        print 'Failed to chmod %s to %s' % (f_name, oct(perm))
         print 'Exception: %s' % e
         return False
-    print '\nChanged permissions for %s to %s' % (cfg_file, perm)
+    print '\nChanged permissions for %s to %s' % (f_name, oct( perm))
 
 
 def get_multiline_input(breaker):
@@ -174,7 +173,7 @@ def update_httpd_settings():
             'DocumentRoot "/var/www/localhost/htdocs/map"'),
 
 
-def process_control():
+def process_control(add_nodejs):
     server_url = 'http://localhost:9001/RPC2'
     try:
         server = xmlrpclib.Server(server_url)
@@ -182,6 +181,7 @@ def process_control():
         print 'Failed to connect to %s' % server_url
         print 'Exception: %s' % e
         return False
+
     print '\nRestarting httpd with supervisor'
     try:
         server.supervisor.stopProcess('httpd')
@@ -195,6 +195,7 @@ def process_control():
         print 'Failed to start httpd'
         print 'Exception: %s' % e
         return False
+
     print 'Starting map with supervisor'
     try:
         server.supervisor.startProcess('map')
@@ -202,6 +203,16 @@ def process_control():
         print 'Failed to start map'
         print 'Exception: %s' % e
         return False
+
+    if add_nodejs == 'y':
+        print 'Starting nodejs with supervisor'
+        try:
+            server.supervisor.startProcess('nodejs')
+        except Exception, e:
+            print 'Failed to start nodejs'
+            print 'Exception: %s' % e
+            return False
+
 
 
 if __name__ == "__main__":
@@ -217,10 +228,55 @@ if __name__ == "__main__":
         # 2. Set correct permissions for config file
         set_file_perms('/root/.ssh/config', 0600)
 
+    # 2. Get git config info
+    print '\nWhat email address should we use for your git config?'
+    cfg_email = sys.stdin.readline().rstrip('\n')
+    subprocess.Popen(['git config --global user.email "%s"' % cfg_email], shell=True,
+        stdout=subprocess.PIPE).communicate()
+    print '\nWhat full name should we use for your git config?'
+    cfg_name = sys.stdin.readline().rstrip('\n')
+    subprocess.Popen(['git config --global user.name "%s"' % cfg_name], shell=True,
+        stdout=subprocess.PIPE).communicate()
+
     # 3. Download the repos
     os.chdir('/home')
     clone_repo('bdt', conn_type)
+
+    # 3a. Pull and go into develop branch
+    print '\nWould you like to git pull upstream\'s develop branch? y|n'
+    line = sys.stdin.readline()
+    if line.rstrip('\n') == 'y':
+        os.chdir('/home/bdt')
+        r = subprocess.Popen(['git checkout -b develop'], shell=True,
+            stdout=subprocess.PIPE).communicate()
+        print r[0]
+        print r[1]
+        r = subprocess.Popen(['git pull --commit --no-edit upstream develop'], shell=True,
+            stdout=subprocess.PIPE).communicate()
+        print r[0]
+        print r[1]
+
+    # 3b. Install npm packages
+    print '\nWould you like to install NodeJS\' npm packages? y|n'
+    line = sys.stdin.readline()
+    add_nodejs = line.rstrip('\n')
+    if add_nodejs == 'y':
+        os.chdir('/home/bdt/map/src/map_nodejs_server')
+        r = subprocess.Popen(['npm install'], shell=True,
+            stdout=subprocess.PIPE).communicate()
+        print r[0]
+        print r[1]
+
+    os.chdir('/home')
     clone_repo('robotframework', conn_type)
+
+    os.chdir('/home')
+    print '\nCloning glowing-configurator repo...'
+    subprocess.Popen(['git clone git@github.com:cbautista1002/glowing-configurator.git'], shell=True,
+            stdout=subprocess.PIPE).communicate()
+    subprocess.Popen(['echo "source /home/glowing-configurator/.bashrc" >> ~/.bashrc'], shell=True,
+            stdout=subprocess.PIPE).communicate()
+    print "\nRun 'source  ~/.bashrc' to load new aliases from glowing-configurator"
 
     # 4. Import map_db
     import_map_db()
@@ -232,7 +288,7 @@ if __name__ == "__main__":
     update_httpd_settings()
 
     # 7. Restart/start supervisor processes
-    process_control()
+    process_control(add_nodejs)
 
     print "\nYou're all set!\n"
 
