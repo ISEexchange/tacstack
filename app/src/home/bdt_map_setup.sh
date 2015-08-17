@@ -12,9 +12,27 @@ chmod 644 /home/SVC_UC4/.ssh/id_rsa.pub
 
 cd /home
 git clone https://github.com/ISEexchange/bdt.git
+
+# Switch to the develop branch
+if [ -z "$1" ] ; then
+    if [ "$1" == "develop" ] ; then
+        echo "Checking out develop branch"
+        cd bdt
+        git checkout -b develop
+        git fetch origin
+        git rebase origin/develop
+    fi
+fi
+
+# Clone the robot framework repo
+cd /home
 git clone https://github.com/ISEexchange/robotframework.git
 
-ln -s /home/bdt/map/src/map_frontend_web_gui/* /var/www/localhost/htdocs/map*
+# Create symlinks
+cd /home/bdt/map/src/map_frontend_web_gui
+find -maxdepth 1 | awk '{print substr($1, 3)}' | while read file; do ln -s "$PWD/$file" "/var/www/localhost/htdocs/map/$file" ; done
+
+cd /home
 ln -s /var/ftp/pub/uploads /var/www/localhost/htdocs/map/results
 ln -s /var/ftp/pub/uploads/reports/ /var/www/localhost/htdocs/map/reports
 
@@ -26,3 +44,6 @@ supervisorctl restart httpd
 
 cd /home/bdt/map/src/map_nodejs_server
 npm install
+
+supervisorctl start map
+supervisorctl start nodejs
