@@ -14,7 +14,7 @@ cd /home
 git clone https://github.com/ISEexchange/bdt.git
 
 # Switch to the develop branch
-if [ -z "$1" ] ; then
+if [ ! -z "$1" ] ; then
     if [ "$1" == "develop" ] ; then
         echo "Checking out develop branch"
         cd bdt
@@ -42,6 +42,7 @@ chmod 600 /root/.ssh/config
 sed -i 's,DocumentRoot "/var/www/localhost/htdocs",DocumentRoot "/var/www/localhost/htdocs/map",g' /etc/apache2/httpd.conf
 supervisorctl restart httpd
 
+source ~/.proxy
 cd /home/bdt/map/src/map_nodejs_server
 npm install
 

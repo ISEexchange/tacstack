@@ -20,9 +20,9 @@ read -p "Hit Enter to continue"
 
 # Now its safe to remove the running container
 cd tacstack
-docker-compose -f docker-compose-prod.yml kill
+./docker-compose -f docker-compose-prod.yml kill
 read -p "Hit Enter to continue"
-docker-compose -f docker-compose-prod.yml rm -f
+./docker-compose -f docker-compose-prod.yml rm -f
 read -p "Hit Enter to continue"
 
 # Download latest images
@@ -30,7 +30,7 @@ cat docker-compose-common.yml | grep image | awk '{print $2}' | while read image
 read -p "Hit Enter to continue"
 
 # Start up the containers
-docker-compose -f docker-compose-prod.yml up -d
+./docker-compose -f docker-compose-prod.yml up -d
 read -p "Hit Enter to continue"
 
 # Import the backed up FTP data
@@ -50,4 +50,5 @@ echo "and run the following:"
 echo "    mysql < map_db_dump_$dt.sql"
 echo "    chmod +x bdt_map_setup.sh"
 echo "    ./bdt_map_setup.sh"
+echo "Then be sure to copy in the keys for SSHing for deployments"
 
