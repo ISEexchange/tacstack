@@ -27,4 +27,6 @@ alias launchmap='startmap; tml'
 export TERM=xterm
 cd /home
 
-export DOCKER_HOST=tcp://td-lss01.test.ise.com:2375
+# use DOCKER_HOST env var if it exists; fall through to td-lss01 by default
+docker_host=${DOCKER_HOST:-"tcp://td-lss01.test.ise.com:2375"}
+export DOCKER_HOST=$docker_host
