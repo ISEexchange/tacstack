@@ -10,6 +10,7 @@ touch /home/SVC_UC4/.ssh/id_rsa.pub
 chmod 600 /home/SVC_UC4/.ssh/id_rsa
 chmod 644 /home/SVC_UC4/.ssh/id_rsa.pub
 
+# Clone the bdt repo
 cd /home
 git clone https://github.com/ISEexchange/bdt.git
 
@@ -27,6 +28,10 @@ fi
 # Clone the robot framework repo
 cd /home
 git clone https://github.com/ISEexchange/robotframework.git
+
+# Clone the docker-t7 repo
+cd /home
+git clone https://github.com/ISEexchange/docker-t7.git
 
 # Create symlinks
 cd /home/bdt/map/src/map_frontend_web_gui

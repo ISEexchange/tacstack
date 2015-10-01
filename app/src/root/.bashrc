@@ -27,3 +27,4 @@ alias launchmap='startmap; tml'
 export TERM=xterm
 cd /home
 
+export DOCKER_HOST=tcp://td-lss01.test.ise.com:2375

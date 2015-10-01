@@ -40,6 +40,9 @@ RUN apk add --update \
 RUN pip install "pip>=1.4,<1.5" --upgrade
 RUN pip install MySQL-python robotframework lxml python-etcd gitpython pylint socketIO-client
 
+RUN curl https://get.docker.com/builds/Linux/x86_64/docker-1.7.1 > /usr/bin/docker && \
+    chmod +x /usr/bin/docker
+
 # Configure sshd.
 RUN ssh-keygen -q -N "" -t dsa -f /etc/ssh/ssh_host_dsa_key && ssh-keygen -q -N "" -t rsa -f /etc/ssh/ssh_host_rsa_key 
 RUN sed -ri 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config && echo 'root:changeme' | chpasswd

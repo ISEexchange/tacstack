@@ -271,6 +271,11 @@ if __name__ == "__main__":
     clone_repo('robotframework', conn_type)
 
     os.chdir('/home')
+    print '\nCloning docker-t7 repo...'
+    subprocess.Popen(['git clone git@github.com:ISEexchange/docker-t7.git'], shell=True,
+            stdout=subprocess.PIPE).communicate()
+
+    os.chdir('/home')
     print '\nCloning glowing-configurator repo...'
     subprocess.Popen(['git clone git@github.com:cbautista1002/glowing-configurator.git'], shell=True,
             stdout=subprocess.PIPE).communicate()
