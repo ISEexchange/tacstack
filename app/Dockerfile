@@ -32,10 +32,16 @@ RUN apk add --update \
     py-pip \
     python \
     python-dev \
+    ruby \
+    ruby-bundler \
+    ruby-dev \
     subversion \
     supervisor \
     vim \
-    && rm -f /var/cache/apk/*
+    && rm -f /var/cache/apk/* && \
+    gem install -N \
+      winrm \
+    && rm -fr /root/.gem
 
 RUN pip install "pip>=1.4,<1.5" --upgrade
 RUN pip install MySQL-python robotframework lxml python-etcd gitpython pylint socketIO-client
