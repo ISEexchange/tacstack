@@ -33,7 +33,6 @@ RUN apk add --update \
     python \
     python-dev \
     ruby \
-    ruby-bundler \
     ruby-dev \
     subversion \
     supervisor \
