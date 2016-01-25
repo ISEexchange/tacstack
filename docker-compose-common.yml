@@ -4,9 +4,11 @@ mapapp:
   environment:
     - MAP_PRODUCTION=false
     - PYTHONPATH=/home/robotframework
+  restart: always
 
 ftpapp:
   image: jumanjiman/dropbox
+  restart: always
 
 mysqldatavol:
   image: quay.io/iseexchange/tacstack_mysqldata:latest

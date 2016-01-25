@@ -40,3 +40,4 @@ ftpdatavoltestenv:
 
 etcdapptestenv:
   image: quay.io/coreos/etcd:v0.4.6
+  restart: always
