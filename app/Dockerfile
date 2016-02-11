@@ -45,7 +45,7 @@ RUN apk add --update \
 RUN pip install "pip>=1.4,<1.5" --upgrade
 RUN pip install MySQL-python robotframework lxml python-etcd gitpython pylint socketIO-client
 
-RUN curl https://get.docker.com/builds/Linux/x86_64/docker-1.7.1 > /usr/bin/docker && \
+RUN curl https://get.docker.com/builds/Linux/x86_64/docker-1.8.3 > /usr/bin/docker && \
     chmod +x /usr/bin/docker
 
 # Configure sshd.
